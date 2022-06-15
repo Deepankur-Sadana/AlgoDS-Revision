@@ -11,34 +11,23 @@ class `Merge Two Sorted Lists` {
     ): ListNode? {
         if (list1 == null) return list2
         if (list2 == null) return list1
-
         var list1 = list1
         var list2 = list2
-
         val preHead = ListNode(-1)
-        var curr :ListNode?= preHead
-        while (list1 != null || list2 != null) {
-            if (list1 == null) {
-                curr?.next = list2
-                break
-            } else if (list2 == null) {
-                curr?.next = list1
-                break
-            }
+        var curr: ListNode? = preHead
+        while (list1 != null && list2 != null) {
+
             if (list1.`val` < list2.`val`) {
                 curr?.next = list1
                 list1 = list1.next
-                curr?.next?.next = null
-
             } else {
                 curr?.next = list2
                 list2 = list2.next
-                curr?.next?.next = null
             }
             curr = curr?.next
-
         }
-
+        if (list1 == null) curr?.next = list2
+        else curr?.next = list1
         return preHead.next
     }
 
