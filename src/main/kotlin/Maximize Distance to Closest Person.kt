@@ -4,28 +4,36 @@ class `Maximize Distance to Closest Person` {
     fun maxDistToClosest(seats: IntArray): Int {
         var max = 1
         var lastTakenSeat = -1
+
+        //SCAN middle
         for (i in seats.indices) {
             if (seats[i] != 0) {//filled seat
-                if (lastTakenSeat != i - 1) {
-                    val distance = i - lastTakenSeat
-                    if (distance % 2 == 0) {// odd no of seats bwn 2 people
-                        max = Math.max(max, distance / 2)
-                    } else {
-                        max = Math.max(max, distance / 2)
-                    }
+                if (lastTakenSeat != -1) {
+                    max = Math.max(max, (i - lastTakenSeat) / 2)
                 }
                 lastTakenSeat = i
-            } else {//vacant seat
-                if (i == seats.size - 1)
-                    max = Math.max(max, (i - lastTakenSeat))
-                else if(lastTakenSeat == -1)
-                    max = Math.max(max, (i - lastTakenSeat))
-                else
-                    max = Math.max(max, (i - lastTakenSeat) / 2)
-
             }
-
         }
+
+        //scan LTR
+        var i = 0
+        while (i != seats.size) {
+            if (seats[i] != 0) {
+                max = Math.max(max, i)
+                break
+            }
+            ++i
+        }
+        i = seats.size - 1
+        //scan RTL
+        while (i != -1) {
+            if (seats[i] != 0) {
+                max = Math.max(max, seats.size - i - 1)
+                break
+            }
+            --i
+        }
+
         return max
 
     }
