@@ -13,7 +13,10 @@ class `Min Cost to Connect All Points` {
         }
         val array = IntArray(points.size)
         val rank = IntArray(points.size)
-        for (i in array.indices) array[i] = i
+        for (i in array.indices) {
+            array[i] = i
+            rank[i] = 1
+        }
 
         allEdges.sortBy { it[0] }
 
@@ -22,22 +25,31 @@ class `Min Cost to Connect All Points` {
 
         for (i in allEdges.indices) {
             val edge = allEdges[i]
-            if (union(edge[1], edge[2], array)){
+            if (union(edge[1], edge[2], array , rank)){
                 ++edgesBuilt
                 totalWeight += edge[0]
             }
-
-
         }
+
+        println(rank.contentToString())
 
         return totalWeight
     }
 
-    private fun union(a: Int, b: Int, array: IntArray) :Boolean{
+    private fun union(a: Int, b: Int, array: IntArray, rank: IntArray) :Boolean{
         val rootA = find(a, array)
         val rootB = find(b, array)
         if (rootA == rootB) return false
-        array[rootB] = rootA
+        if (rank[rootA] > rank[rootB]) {
+            array[rootB] = rootA
+        }else if (rank[rootB] > rank[rootA]) {
+            array[rootA] = rootB
+        }else {// sam rank
+            array[rootB] = rootA
+            rank[rootA] += 1
+        }
+
+//        array[rootB] = rootA
         return true
     }
 
