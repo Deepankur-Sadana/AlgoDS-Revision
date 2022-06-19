@@ -1,39 +1,37 @@
+import java.lang.StringBuilder
+
 class `Letter Combinations of a Phone Number` {
 
-
+    val res = ArrayList<String>()
     fun letterCombinations(digits: String): List<String> {
-        val res = HashSet<String>()
         if (digits.isEmpty()) return emptyList()
         buildMap()
-        recurse(0, HashSet(), digits)
+        recurse(0, StringBuilder(), digits)
         return res.toList()
     }
 
     private fun recurse(
         numbersPressedSoFar: Int,
-        combinationsFormedSoFar: HashSet<String>,
+        stringFormedSoFar: StringBuilder,
         digits: String
     ) {
-        if (numbersPressedSoFar == digits.length) return
+        if (numbersPressedSoFar == digits.length) {
+            res.add(stringFormedSoFar.toString())
+            return
+        }
         if (numbersPressedSoFar == 0) {
             val keyPressed = map[digits[0]]
             keyPressed!!.forEach {
-                combinationsFormedSoFar.add(it.toString())
+                recurse(1, StringBuilder(it.toString()), digits)
             }
-            recurse(1, combinationsFormedSoFar, digits)
         } else {
             val keyPressed = map[digits[numbersPressedSoFar]]
-            val removedStrings = ArrayList<String>()
-            removedStrings.addAll(combinationsFormedSoFar)
-            combinationsFormedSoFar.clear()
             keyPressed!!.forEach {  char ->
-                removedStrings.forEach {  removedString ->
-                    combinationsFormedSoFar.add(removedString + char)
-                }
+                val sb = StringBuilder()
+                sb.append(stringFormedSoFar)
+                sb.append(char)
+                recurse(numbersPressedSoFar + 1, sb, digits)
             }
-
-            recurse(numbersPressedSoFar + 1 , combinationsFormedSoFar, digits)
-
         }
     }
 
